@@ -1,0 +1,112 @@
+---
+title: "introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Displaying and managing custom tracks into a Genome Browser (UCSC) can be annoying. 
+
+![](http://giphygifs.s3.amazonaws.com/media/LrnlRuehwS2WY/giphy.gif)
+
+For this reason we have created a R package that facilitates the creation and upload of custom tracks based on [track hubs](https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html). A track hub is way of organizing large numbers of genome-wide data sets, configured with a set of plain-text files that determine the organization, UI, labels, color, and other details. The data underlying the tracks and optional sequence in a hub reside on the remote server of the data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL or VCF format that contain the data at several resolutions.   
+
+## Installation
+
+The following code demonstrates a track hub built out of all bigWig files found in a directory.
+
+```{r}
+library(devtools)
+install_github("msubirana20/ucschubgenerator")
+
+```
+ 
+
+## Basic Example
+```{r}
+# Import libraries
+library(ucschubgenerator)
+
+
+# Define variables
+
+pathHub <- 'trackHubeRProve'
+hubName <- 'myhub'
+hubShortLabel <- 'myhub'
+hubLongLabel <- 'myhub'
+emailAddress <- 'msubirana@igtp.cat'
+assemblyDatabase <- 'hg19'
+gattacaHtml <- 'http://gattaca.imppc.org/genome_browser/lplab'
+gattacaFolderHub <- 'marcHubs'
+
+# Create basic components of a track hub
+
+hubGenerator(pathHub = pathHub,
+             hubName = hubName,
+             hubShortLabel = hubShortLabel,
+             hubLongLabel = hubLongLabel,
+             emailAddress = emailAddress,
+             assemblyDatabase = assemblyDatabase,
+             gattacaHtml = gattacaHtml,
+             gattacaFolderHub = gattacaFolderHub)
+
+# Add a track for every bigwig found in the defined path
+# Files should be inside the local hub path and in a folder with the assembly name
+# Track file will only contain 
+
+# Delete old trackDb if exists (avoid duplicates in the file)
+unlink(file.path(pathHub, assemblyDatabase, 'trackDb.txt'))
+
+pathBigWig <- 'trackHubeRProve/hg19'
+
+tracks <- list.files(pathBigWig, 
+           pattern = "\\.bw$",
+           full.names = T)
+
+
+type <- 'bigWig'
+visibility <- 'full'
+color <- '128,0,5'  
+autoScale <- 'on'
+
+for (track in tracks){
+  
+  trackhubTrack(gattacaHtml = gattacaHtml,
+                gattacaFolderHub = gattacaFolderHub,
+                pathHub = pathHub,
+                track = track,
+                type = type,
+                visibility = visibility,
+                color = color,
+                autoScale = autoScale)
+}
+
+# Define gattaca user and path and rsync
+
+gattacaDir <- '/data/apache/htdocs/genome_browser/lplab'
+gattacaUser <- 'msubirana@gattaca'
+
+rsyncHub(gattacaHtml = gattacaHtml,
+         gattacaDir = gattacaDir,
+         gattacaFolderHub = gattacaFolderHub,
+         gattacaUser = gattacaUser)
+    
+
+```
+
+Once the script ends, you can upload the hub in the [USCS web](https://genome.ucsc.edu/cgi-bin/hgHubConnect?hubCheckUrl=http%3A%2F%2Fgattaca.imppc.org%2Fgenome_browser%2Flplab%2FmarcHubs%2FparserProve%2Fhub.txt&hgsid=759593043_P7LJWoCqmm0BrJx4xCRwGGvMCkRt). selecting My Hubs and pasting the link generated (server link of the hub.txt file).
+
+![](https://i.ibb.co/s1BVrd0/Screenshot-from-2019-09-17-15-25-59.png)
+
+To visualize it, is necessary to open the appropriate human assembly and the track hub will appear under the Custom Tracks. 
+
+![](https://i.ibb.co/gM0cCfB/Screenshot-from-2019-09-17-15-32-43.png)
