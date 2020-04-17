@@ -10,7 +10,7 @@
 #' @param gattacaHtml Gattaca html
 #' @param gattacaDir Gattaca base directory
 #' @param gattacaFolderHub Folder in the server where to save hub directory
-#' @param gattacaUser User of gattaca server (user@gattaca)
+#' @param gattacaUser User of gattaca server ('user@gattaca')
 
 # Generation of the track hub components
 hubGenerator <- function(pathHub,

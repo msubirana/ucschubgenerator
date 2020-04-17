@@ -26,7 +26,8 @@ The following code demonstrates a track hub built out of all bigWig files found 
 
 ```{r}
 library(devtools)
-install_github("msubirana20/ucschubgenerator")
+install_github("msubirana/ucschubgenerator")
+
 
 ```
  
