@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 Displaying and managing custom tracks into a Genome Browser (UCSC) can be annoying. 
 
-![](http://giphygifs.s3.amazonaws.com/media/LrnlRuehwS2WY/giphy.gif)
+![](img/giphy.gif)
 
 For this reason we have created a R package that facilitates the creation and upload of custom tracks based on [track hubs](https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html). A track hub is way of organizing large numbers of genome-wide data sets, configured with a set of plain-text files that determine the organization, UI, labels, color, and other details. The data underlying the tracks and optional sequence in a hub reside on the remote server of the data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL or VCF format that contain the data at several resolutions. For more information about the types and parameters visit [trackDb information](https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html). Currently the allowed parameters are: type, visibility, color and autoScale, shortLabel and longLabel.
 
