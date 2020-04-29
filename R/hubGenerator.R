@@ -14,7 +14,6 @@
 #'email_address <- 'example@email.com'
 #'assembly_database <- 'hg38'
 #'gattaca_folder_hub <- 'exampleHub'
-
 #'hubGenerator(path_local_hub = path_local_hub,
 #'             hub_name = hub_name,
 #'             hub_short_label = hub_short_label,
@@ -23,8 +22,7 @@
 #'             description_url = NULL,
 #'             assembly_database = assembly_database,
 #'             gattaca_folder_hub = gattaca_folder_hub)
-
-# Generation of the track hub components
+#' @export
 hubGenerator <- function(path_local_hub,
                          hub_name,
                          hub_short_label,

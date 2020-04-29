@@ -47,6 +47,7 @@ for(track in tracks){
   trackhubTrack(gattaca_folder_hub = gattaca_folder_hub,
                 path_local_hub = path_local_hub,
                 hub_name = hub_name,
+                gattaca_folder_hub = gattaca_folder_hub,
                 assembly_database = assembly_database,
                 track = track,
                 short_label = short_label,
@@ -56,4 +57,5 @@ for(track in tracks){
                 color = color,
                 quote_label = quote_label)
 }
+#' @export
 }

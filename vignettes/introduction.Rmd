@@ -50,6 +50,9 @@ In this case we will select the '.vcf.gz' of the 'example_data' download previou
 variable. All the 'vcf.gz' will present the same parameters defined for this particular hub.
 
 ```{r}
+# Import libraries
+library(ucschubgenerator)
+
 # Define variables
 path_tracks <- path
 pattern_tracks <- '.vcf.gz$'
@@ -135,6 +138,7 @@ for(track in tracks){
 
   trackhubTrack(path_local_hub = path_local_hub,
                 hub_name = hub_name,
+                gattaca_folder_hub = gattaca_folder_hub,
                 assembly_database = assembly_database,
                 track = track,
                 short_label = short_label,

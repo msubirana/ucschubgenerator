@@ -16,6 +16,7 @@
 #'           path_local_hub = path_local_hub)
 
 # rsync trackhub to server
+#' @export
 rsyncHub <- function(path_local_hub,
                      hub_name,
                      gattaca_html='http://gattaca.imppc.org/genome_browser/lplab',

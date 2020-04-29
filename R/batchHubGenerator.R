@@ -89,8 +89,7 @@
 #'                   quote_label = quote_label,
 #'                   gattaca_user = gattaca_user)
 #'
-
-# Generation of the track hub components
+#' @export
 batchHubGenerator <- function(path_tracks,
                               pattern_tracks,
                               path_local_hub,
