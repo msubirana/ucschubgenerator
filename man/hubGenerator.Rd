@@ -2,43 +2,62 @@
 % Please edit documentation in R/hubGenerator.R
 \name{hubGenerator}
 \alias{hubGenerator}
-\title{R parser for UCSC truckhub creation}
+\title{hubGenerator}
 \usage{
 hubGenerator(
-  pathHub,
-  hubName,
-  hubShortLabel,
-  hubLongLabel,
-  emailAddress,
-  descriptionUrl = NULL,
-  assemblyDatabase,
-  gattacaHtml,
-  gattacaFolderHub
+  path_local_hub,
+  hub_name,
+  hub_short_label,
+  hub_long_label,
+  email_address,
+  description_url = NULL,
+  assembly_database,
+  gattaca_html = "http://gattaca.imppc.org/genome_browser/lplab",
+  gattaca_folder_hub
 )
 }
 \arguments{
-\item{pathHub}{Trackhub path}
+\item{path_local_hub}{Local folder of the hub where the files generated will be saved. A folder with the \code{hub_name}
+will be generated.}
 
-\item{hubName}{Top-level name of the hub}
+\item{hub_name}{Single-word name of the directory containing the track hub files. Not displayed to hub users.}
 
-\item{hubShortLabel}{Short label for the hub, alias for UCSC parameter shortLabel}
+\item{hub_short_label}{The short name for the track hub. Suggested maximum length is 17 characters.
+Displayed as the hub name on the Track Hubs page and the track group name on the browser tracks page.}
 
-\item{hubLongLabel}{Long label for the hub, alias for UCSC parameter longLabel}
+\item{hub_long_label}{Longer descriptive label for the track hub. Suggested maximum length is 80 characters.
+Displayed in the description field on the Track Hubs page.}
 
-\item{emailAddress}{Email that will be provided in the hub for contact info}
+\item{email_address}{Email that will be provided in the hub for contact info.}
 
-\item{descriptionUrl}{URL to HTML page with a description of the hub's contents}
+\item{description_url}{URL to HTML page with a description of the hub's contents.}
 
-\item{assemblyDatabase}{Reference genome used for alignment}
+\item{assembly_database}{Reference genome used for alignment.}
 
-\item{gattacaHtml}{Gattaca html}
-
-\item{gattacaFolderHub}{Folder in the server where to save hub directory}
-
-\item{gattacaDir}{Gattaca base directory}
-
-\item{gattacaUser}{User of gattaca server (user@gattaca)}
+\item{gattaca_folder_hub}{Folder in the server where to save hub directory}
+}
+\value{
+Creates a folder with the basics (hub.txt and genomes.txt) for the generation of a UCSC hub (based on gattaca server).
 }
 \description{
-R parser for UCSC truckhub creation
+Generates a local folder with the basic hub structure
+}
+\examples{
+path_tracks <- path
+hub_name <- 'example_hub_multiple'
+path_local_hub <- file.path(path, 'hubs')
+dir.create(path_local_hub)
+hub_short_label <- hub_name
+hub_long_label <- 'Example of ucschubgenerator using different type of files and parameters'
+email_address <- 'example@email.com'
+assembly_database <- 'hg38'
+gattaca_folder_hub <- 'exampleHub'
+hubGenerator(path_local_hub = path_local_hub,
+            hub_name = hub_name,
+            hub_short_label = hub_short_label,
+            hub_long_label = hub_long_label,
+            email_address = email_address,
+            description_url = NULL,
+            assembly_database = assembly_database,
+            gattaca_folder_hub = gattaca_folder_hub)
 }
