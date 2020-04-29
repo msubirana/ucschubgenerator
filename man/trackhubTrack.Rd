@@ -57,5 +57,4 @@ for(track in tracks){
                 color = color,
                 quote_label = quote_label)
 }
-#' @export
 }
