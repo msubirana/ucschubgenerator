@@ -121,6 +121,7 @@ hubGenerator(path_local_hub = path_local_hub,
              gattaca_folder_hub = gattaca_folder_hub)
 
 # Delete old trackDb if exists (avoid duplicates in the file)
+path_local_hub_name <- file.path(path_local_hub, hub_name)
 unlink(file.path(path_local_hub_name, assembly_database, 'trackDb.txt'))
 
 # Upload "vcf.gz" files
