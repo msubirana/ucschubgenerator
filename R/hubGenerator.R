@@ -1,157 +1,91 @@
-#' R parser for UCSC truckhub creation
+#' hubGenerator
 #'
-#' @param pathHub Trackhub path
-#' @param hubName Top-level name of the hub
-#' @param hubShortLabel Short label for the hub, alias for UCSC parameter shortLabel
-#' @param hubLongLabel Long label for the hub, alias for UCSC parameter longLabel
-#' @param emailAddress Email that will be provided in the hub for contact info
-#' @param descriptionUrl URL to HTML page with a description of the hub's contents
-#' @param assemblyDatabase Reference genome used for alignment
-#' @param gattacaHtml Gattaca html
-#' @param gattacaDir Gattaca base directory
-#' @param gattacaFolderHub Folder in the server where to save hub directory
-#' @param gattacaUser User of gattaca server ('user@gattaca')
+#' Generates a local folder with the basic hub structure
+#'
+#' @inheritParams batchHubGenerator
+#' @return Creates a folder with the basics (hub.txt and genomes.txt) for the generation of a UCSC hub (based on gattaca server).
+#' @examples
+#'path_tracks <- path
+#'hub_name <- 'example_hub_multiple'
+#'path_local_hub <- file.path(path, 'hubs')
+#'dir.create(path_local_hub)
+#'hub_short_label <- hub_name
+#'hub_long_label <- 'Example of ucschubgenerator using different type of files and parameters'
+#'email_address <- 'example@email.com'
+#'assembly_database <- 'hg38'
+#'gattaca_folder_hub <- 'exampleHub'
+
+#'hubGenerator(path_local_hub = path_local_hub,
+#'             hub_name = hub_name,
+#'             hub_short_label = hub_short_label,
+#'             hub_long_label = hub_long_label,
+#'             email_address = email_address,
+#'             description_url = NULL,
+#'             assembly_database = assembly_database,
+#'             gattaca_folder_hub = gattaca_folder_hub)
 
 # Generation of the track hub components
-hubGenerator <- function(pathHub,
-                         hubName,
-                         hubShortLabel,
-                         hubLongLabel,
-                         emailAddress,
-                         descriptionUrl = NULL,
-                         assemblyDatabase,
-                         gattacaHtml,
-                         gattacaFolderHub){
+hubGenerator <- function(path_local_hub,
+                         hub_name,
+                         hub_short_label,
+                         hub_long_label,
+                         email_address,
+                         description_url = NULL,
+                         assembly_database,
+                         gattaca_html='http://gattaca.imppc.org/genome_browser/lplab',
+                         gattaca_folder_hub){
 
-  # hub file generation
+  # local hub files generation
+  message(paste(Sys.time(),"\n",
+                'Starting hubGenerator using:\n',
+                '>Path local hub:', path_local_hub, '\n',
+                '>Hub name:', hub_name, '\n',
+                '>Hub short label:', hub_short_label, '\n',
+                '>Hub long label:', hub_long_label, '\n',
+                '>Email address:', email_address, '\n',
+                '>Description url:', description_url, '\n',
+                '>Assembly database:', assembly_database, '\n',
+                '>Gattaca html:', gattaca_html, '\n',
+                '>Gattaca folder hub:', gattaca_folder_hub, '\n'))
 
-  filesGattacaPath <- file.path(gattacaHtml, gattacaFolderHub, basename(pathHub))
+  # hub text generation
+  path_local_hub_name <- file.path(path_local_hub, hub_name)
+  gattaca_html_hub <- file.path(gattaca_html, gattaca_folder_hub, basename(path_local_hub_name))
 
-  serverGenomes <- file.path(filesGattacaPath, 'genomes.txt')
+  gattaca_html_hub_genomes <- file.path(gattaca_html_hub, 'genomes.txt')
 
-  hubText <- paste0('hub ', hubName, '\n',
-                    'shortLabel ', hubShortLabel, '\n',
-                    'longLabel ', hubLongLabel, '\n',
-                    'genomesFile ', serverGenomes, '\n',
-                    'email ', emailAddress)
+  hub_text <- paste0('hub ', hub_name, '\n',
+                    'shortLabel ', hub_short_label, '\n',
+                    'longLabel ', hub_long_label, '\n',
+                    'genomesFile ', gattaca_html_hub_genomes, '\n',
+                    'email ', email_address)
 
-  if (!is.null(descriptionUrl)){
-    hubText <- paste0(hubText,
-                      '\n', 'descriptionUrl ',  descriptionUrl)
+  if (!is.null(description_url)){
+    hub_text <- paste0(hub_text,
+                      '\n', 'description_url ',  description_url)
   }
 
-  write(hubText, file.path(pathHub, 'hub.txt'))
+  dir.create(path_local_hub_name, showWarnings = FALSE)
+  write(hub_text, file.path(path_local_hub_name, 'hub.txt'))
 
   # genomes file generation
 
-  localTrackDb <- file.path(pathHub, assemblyDatabase, "trackDb.txt")
-  localMetaTab <- file.path(pathHub, assemblyDatabase, "metaTab.txt")
+  gattaca_html_hub_trackdb <- file.path(gattaca_html_hub, assembly_database, "trackDb.txt")
+  gattaca_html_hub_metatab <- file.path(gattaca_html_hub, assembly_database, "metaTab.txt")
 
-  serverTrackDb <- file.path(filesGattacaPath, assemblyDatabase, "trackDb.txt")
-  serverMetaTab <- file.path(filesGattacaPath, assemblyDatabase, "metaTab.txt")
-
-  genomesText <- paste0('genome ', assemblyDatabase, '\n',
-                        'trackDb ', serverTrackDb)
+  genomes_text <- paste0('genome ', assembly_database, '\n',
+                        'trackDb ', gattaca_html_hub_trackdb)
 
   if (exists('metaTab')){
-    genomesText <- paste0(genomesText,
-                          '\n', 'metaTab ', serverMetaTab)
+    genomes_text <- paste0(genomes_text,
+                          '\n', 'metaTab ', gattaca_html_hub_metatab)
   }
 
-  write(genomesText, file.path(pathHub, 'genomes.txt'))
+  write(genomes_text, file.path(path_local_hub_name, 'genomes.txt'))
+
+  message(paste(Sys.time(),"\n",
+                'Finished hubGenerator'))
+
 
 }
-
-# track names can't have any spaces or special chars
-correctTrackName <- function(name){
-  corrName <- stringr::str_replace_all(gsub(" ","" , name ,ignore.case = TRUE), "[^[:alnum:]]", "")
-  return(corrName)
-}
-
-# Generation of the track hub c trackomponents
-trackhubTrack <- function(gattacaHtml,
-                          gattacaFolderHub,
-                          pathHub,
-                          track,
-                          shortLabel = NULL,
-                          longLabel = NULL,
-                          type = NULL,
-                          visibility = NULL,
-                          color = NULL,
-                          autoScale = NULL){
-
-  filesGattacaPath <- file.path(gattacaHtml, gattacaFolderHub, basename(pathHub))
-
-  bigDataUrl <- file.path(filesGattacaPath, assemblyDatabase, basename(track))
-
-  filesGattacaPath <- file.path(gattacaHtml, gattacaFolderHub, basename(pathHub))
-
-  track <- tools::file_path_sans_ext(basename(track))
-
-  track <- correctTrackName(track)
-
-  shortLabel <- track
-
-  longLabel <- track
-
-  trackText <- paste0('track', " ", track)
-
-  trackText <- paste0(trackText,
-                     '\n',
-                     'bigDataUrl', " ", bigDataUrl)
-
-  trackText <- paste0(trackText,
-                     '\n',
-                     'shortLabel', " ", shortLabel)
-
-  trackText <- paste0(trackText,
-                     '\n',
-                     'longLabel', " ", longLabel)
-
-  # get all the arguments of the function
-  trackArgs <- as.list(match.call(trackhubTrack))
-
-  trackArgs <- names(trackArgs)
-
-  # discart first two elements (empty and track)
-  trackArgs <- trackArgs[-c(seq(1,5))]
-
-    # print to file only arguments that exist and their value
-
-  for (trackArg in trackArgs){
-    if (exists(trackArg)){
-      trackText <- paste0(trackText,
-                          '\n',
-                          paste0(substitute(trackArg), " ", eval(parse(text = trackArg))))
-    }
-  }
-
-  trackText <- paste0(trackText,
-                      '\n')
-
-  dir.create(file.path(pathHub, assemblyDatabase), showWarnings = FALSE)
-  write(trackText, file.path(pathHub, assemblyDatabase, 'trackDb.txt'), append = T)
-}
-
-
-# rsync trackhub to server
-rsyncHub <- function(gattacaHtml,
-                     gattacaDir,
-                     gattacaFolderHub,
-                     gattacaUser){
-
-  gattacaPath <- file.path(gattacaDir, gattacaFolderHub)
-
-  system(paste('rsync -r -a -v -e ssh',
-               pathHub,
-               paste0(gattacaUser,
-                      ':',
-                      gattacaPath)))
-
-  # generate hub link
-
-  print(paste0(file.path(gattacaHtml, gattacaFolderHub, basename(pathHub), 'hub.txt')))
-}
-
-
 
