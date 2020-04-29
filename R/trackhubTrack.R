@@ -34,7 +34,7 @@
 #'                 color = color,
 #'                 quote_label = quote_label)
 #' }
-#' #' @export
+#' @export
 trackhubTrack <- function(gattaca_html = '/data/apache/htdocs/genome_browser/lplab',
                           gattaca_folder_hub,
                           path_local_hub,
