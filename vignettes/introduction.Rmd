@@ -90,11 +90,8 @@ batchHubGenerator(path_tracks = path_tracks,
 
 Once the script ends, you can upload the hub in the [USCS web](https://genome.ucsc.edu/cgi-bin/hgHubConnect?hubCheckUrl=http%3A%2F%2Fgattaca.imppc.org%2Fgenome_browser%2Flplab%2FmarcHubs%2FparserProve%2Fhub.txt&hgsid=759593043_P7LJWoCqmm0BrJx4xCRwGGvMCkRt). selecting My Hubs and pasting the link generated (server link of the hub.txt file).
 
-![](https://i.ibb.co/s1BVrd0/Screenshot-from-2019-09-17-15-25-59.png)
-
 To visualize it, is necessary to open the appropriate human assembly and the track hub will appear under the Custom Tracks. 
-
-![](https://i.ibb.co/gM0cCfB/Screenshot-from-2019-09-17-15-32-43.png)
+![](img/Screenshot-from-2019-09-17-15-25-59.png)
 
 This time we will create a hub with different types of tracks and different parameters. 
 
