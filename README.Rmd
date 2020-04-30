@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
+knitr::opts_chunk$set(echo = TRUE, 
                       base.url = 'https://github.com/msubirana/ucschubgenerator/raw/master/')
 ```
 
